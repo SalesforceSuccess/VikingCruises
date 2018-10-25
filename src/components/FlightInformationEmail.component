@@ -1,0 +1,208 @@
+<apex:component id="FlightInformationEmail" access="global" controller="FlightInformationController">
+    <apex:attribute assignTo="{!itineraryId}" type="Id" name="itinId" description="Itinerary Id" access="global"/>
+
+    <div style="margin-bottom: 10px;max-width: 800px;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+        <p>尊敬的 {!accountName} 先生/女士,</p>
+        <p>Dear Mr/Ms {!accountName},</p>
+        <p style="margin-bottom: 8px">
+            很高兴通知您，您的维京机票已经顺利出票。以下是机票确认单详细信息，请您仔细核对确保信息无误，同时请提前打印本机票确认单以供签证申请，谢谢。
+        </p>
+        <p style="margin-top: 0;">
+            I have pleasure in confirming your Viking Air.  Please take time to check the details:
+        </p>
+        <div style="padding: 6px;margin-top: 16px;border-top: 2px solid #cccccc">
+            <p style="font-weight: bold;margin-top: 8px">旅客订座记录/PNR: <span style="font-weight: normal;margin-left: 8px">{!ticket.pnr}</span></p>
+            <p style="font-weight: bold">出票航空公司/ISSUING AIRLINE: <span style="font-weight: normal;margin-left: 8px">{!ticket.issuingAirline}/ {!ticket.issuingAirlineEnglishName}</span></p>
+            <p style="font-weight: bold">航空公司电话/AIRLINE Phone: <span style="font-weight: normal;margin-left: 8px">{!ticket.airlinePhone}</span></p>
+            <p style="font-weight: bold;margin-bottom: 0">出票日期/ISSUE DATE:<span style="font-weight: normal;margin-left: 8px">
+        <apex:outputText value="{0,date,dd-MM-yyyy}">
+            <apex:param value="{!ticket.issuingDate}" />
+        </apex:outputText></span>
+            </p>
+        </div>
+    </div>
+    <apex:variable value="{!1}" var="passengerNum"/>
+    <apex:repeat value="{!passengers}" var="passengerId">
+        <div style="border: 1px solid #aaaaaa;margin: 20px 0;padding-bottom: 8px;max-width: 800px;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+            <p style="font-size: 20px;background-color: #dddddd;padding-left: 8px;margin: 0">乘客{!passengerNum}-{!passengers[passengerId].lastName}{!passengers[passengerId].firstName} </p>
+            <div style="padding:0 16px">
+                <p style="margin-bottom: 0;padding:4px 0 14px 4px;box-sizing: border-box;font-size: 16px;">乘客信息已提交至航空公司/PASSENGER INFORMATION SUBMITTED TO THE AIRLINE</p>
+                <p>
+                <table style='border-collapse:collapse;text-align: center;width: 100%;border-top: 1px solid #999;border-left: 1px solid #999'>
+                    <thead>
+                    <tr style="background-color: #f3f3f3;">
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>护照号码</div>Passport No</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>护照:姓</div>Passport Last Name</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>护照:名</div>Passport First Name</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>国籍</div>Nationality</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;width: 12%;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>出生日期</div>DOB</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>性别</div>Gender</th>
+                        <th style="padding: 0 4px;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div>护照有效期</div>Passport Expiry</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr style="height: 18px">
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].passportNumber}</td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].passportSurname}</td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].passportFirstName}</td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].nationality}</td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                            <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                <apex:param value="{!passengers[passengerId].dob}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].gender}</td>
+                        <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                            <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                <apex:param value="{!passengers[passengerId].passportExpiry}" />
+                            </apex:outputText>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+                <p style="margin-top: 16px;padding-top: 10px;font-size: 16px;margin-bottom: -8px">航班详情/FLIGHT DETAILS</p>
+
+                <p style="margin: 8px 0 6px 0;padding-top: 10px;font-weight: bold;">出境（中国出发至游轮）/OUTBOUND (FROM CHINA TO THE SHIP) </p>
+
+                <apex:variable value="{!1}" var="legNum"/>
+                <apex:repeat value="{!outboundFlightLegsByPassengers[passengerId]}" var="outboundLeg">
+                    <p style="margin: 0">去程第{!legNum}段/OUTBOUND LEG {!legNum} </p>
+                    <p>
+                    <table style='border-collapse:collapse;text-align: center;margin: 10px 0;border-top: 1px solid #999;border-left: 1px solid #999'>
+                        <thead>
+                        <tr style="background-color: #f3f3f3">
+                            <th style="padding: 0 4px;width: 8%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">票号</div>Ticket Number</th>
+                            <th style="padding: 0 4px;width: 8%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">航班号码</div>Flight Number</th>
+                            <th style="padding: 0 4px;width: 16%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">出发机场</div>Origin Airport*</th>
+                            <th style="padding: 0 4px;width: 16%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">目的地机场</div>Destination Airport*</th>
+                            <th style="padding: 0 4px;width: 12%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">日期</div>Date</th>
+                            <th style="padding: 0 4px;width: 10%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">出发时间</div>Departure Time</th>
+                            <th style="padding: 0 4px;width: 12%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">到达日期</div>ArrivalDate</th>
+                            <th style="padding: 0 4px;width: 10%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">到达时间</div>Arrival Time</th>
+                            <th style="padding: 0 4px;width: 4%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">行李数</div>Piece</th>
+                            <th style="padding: 0 4px;width: 4%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">每件行李重量</div>WEIGHT PER PIECE(KG)</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr style="height: 18px">
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].ticketNumber}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.airlineCode}{!outboundLeg.flightNumber}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.originAirport}-{!outboundLeg.departureAirportNameZh}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.destinationAirport}-{!outboundLeg.arrivalAirportNameZh}</td>
+
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                                <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                    <apex:param value="{!outboundLeg.departureDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.departureTime}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                                <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                    <apex:param value="{!outboundLeg.arrivalDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.arrivalTime}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.piece}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!outboundLeg.weight}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </p>
+                    <apex:variable var="legNum" value="{!legNum + 1}"/>
+                </apex:repeat>
+
+                <p style="margin: 18px 0 6px 0;padding-top: 10px;font-weight: bold;border-top: 1px solid #dddddd">入境（返程回中国）/INBOUND (RETURN TO CHINA)</p>
+                <apex:variable value="{!1}" var="legNum"/>
+                <apex:repeat value="{!inboundFlightLegsByPassengers[passengerId]}" var="inboundLeg">
+                    <p style="margin: 0">回程第{!legNum}段/RETURN LEG {!legNum} </p>
+                    <p>
+                    <table border="1px solid #aaa" style='border-collapse:collapse;text-align: center;margin: 10px 0;border-top: 1px solid #999;border-left: 1px solid #999'>
+                        <thead>
+                        <tr border="1px solid #aaa" style="background-color: #f3f3f3">
+                            <th style="padding: 0 4px;width: 8%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">票号</div>Ticket Number</th>
+                            <th style="padding: 0 4px;width: 8%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">航班号码</div>Flight Number</th>
+                            <th style="padding: 0 4px;width: 16%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">出发机场</div>Origin Airport*</th>
+                            <th style="padding: 0 4px;width: 16%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">目的地机场</div>Destination Airport*</th>
+                            <th style="padding: 0 4px;width: 12%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">日期</div>Date</th>
+                            <th style="padding: 0 4px;width: 10%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">出发时间</div>Departure Time</th>
+                            <th style="padding: 0 4px;width: 12%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">到达日期</div>ArrivalDate</th>
+                            <th style="padding: 0 4px;width: 10%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">到达时间</div>Arrival Time</th>
+                            <th style="padding: 0 4px;width: 4%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">行李数</div>Piece</th>
+                            <th style="padding: 0 4px;width: 4%;border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;"><div style="white-space:nowrap;">每件行李重量</div>WEIGHT PER PIECE(KG)</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr style="height: 18px">
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!passengers[passengerId].ticketNumber}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.airlineCode}{!inboundLeg.flightNumber}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.originAirport}-{!inboundLeg.departureAirportNameZh}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.destinationAirport}-{!inboundLeg.arrivalAirportNameZh}</td>
+
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                                <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                    <apex:param value="{!inboundLeg.departureDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.departureTime}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+                                <apex:outputText value="{0,date,dd-MMM-yyyy}">
+                                    <apex:param value="{!inboundLeg.arrivalDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.arrivalTime}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.piece}</td>
+                            <td style="border-right: 1px solid #999;border-bottom: 1px solid #999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">{!inboundLeg.weight}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </p>
+                    <apex:variable var="legNum" value="{!legNum + 1}"/>
+                </apex:repeat>
+                <!--
+                <p>航空公司详情/AIRLINE DETAILS </p>
+                <apex:repeat value="{!airlinesByPassengers[passengerId]}" var="airline">
+                    <p>航空公司: <span style="color:red"> {!airlinesByPassengers[passengerId][airline].airlineName}</span></p>
+                    <p>Airline name : <span style="color:red"> {!airlinesByPassengers[passengerId][airline].airlineName}</span></p>
+                    <br/>
+
+                    <p>航空公司24小时紧急联系电话: <span style="color:red">{!airlinesByPassengers[passengerId][airline].airlineEmergencyPhone}</span></p>
+                    <p>Airline 24 hour emergency number: <span style="color:red">{!airlinesByPassengers[passengerId][airline].airlineEmergencyPhone}</span></p>
+
+
+                </apex:repeat>
+
+                -->
+            </div>
+        </div>
+
+        <apex:variable var="passengerNum" value="{!passengerNum + 1}"/>
+    </apex:repeat>
+
+    <div style="max-width: 800px;margin-top:8px;color: #999999;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+        <p style="color: #666;margin-bottom: 0">维京游轮已经收到您的航班信息，我们将会安排您由<span> {!arrivalAirportName} </span>至游轮的接机服务。
+            维京游轮接机工作人员将身着维京制服，在您航班的到达出口等您。根据当地机场管理要求的不同，接机服务会有所差异。详情请查看维京官方网站 <a href="https://www.vikingcruises.cn/experiences/ship-experiences/the-services/">www.vikingcruises.cn</a>  了解您到达地机场的接机服务详情。
+        </p>
+        <p style="margin-top: 10px;font-size: 12px">The ship has been advised of your flights details.  Our shore team has made arrangements for your transfer from <span> {!arrivalAirportNameEN} </span>
+            airport to the ship.  A uniformed member of the Viking arrivals team will be waiting for you at the arrivals gate.   The service offered at each airport differs based on local regulations. Please refer to our website  <a href="https://www.vikingcruises.cn/experiences/ship-experiences/the-services/">www.vikingcruises.cn</a>  for details of procedures at your destination airport.
+        </p>
+
+
+
+        <p style="color: #666;margin-top: 20px;margin-bottom: 0">航空公司联系电话请参见上文，您可以通过该号码联系到航空公司。</p>
+        <p style="margin-top: 10px;font-size: 12px">We have included the Airline contact number should you need it.</p>
+
+        <p style="color: #666;margin-top: 20px;margin-bottom: 0">行程出发前如果您有任何疑问，请致电维京客服热线：400-6666-927 或者联系您的旅行社。如您在出发当天需要协助，维京客服中心将在工作时间（北京时间周一至周五 8:00-21:00，周六至周日 8:00-18:30）内提供支持，客服中心工作时间外请拨打游轮前台电话:
+            <span>{!ship.shipNameChinese} on {!ship.shipPhone1}/{!ship.shipPhone2}</span>
+        </p>
+
+        <p style="margin-top: 10px;font-size: 12px">For enquiries before departure please contact me at the call centre on 400-666-927 or contact your travel agent.  On the day of departure, the reception team at the call centre will be available during normal office hours.  For enquiries on the day of embarkation after office hours please contact our front desk on the:
+            <span>{!ship.shipName} on {!ship.shipPhone1}/{!ship.shipPhone2}</span>
+        </p>
+    </div>
+    <div style="max-width: 800px;border-top: 2px solid #cccccc;font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, sans-serif;">
+        <p>
+            您的客户关怀顾问: {!concierge.conciergeName} <br />
+            电话/Telephone: 400-6666-927 <br />
+            邮箱/Email: {!concierge.conciergeEmail}<br />
+        </p>
+    </div>
+</apex:component>
