@@ -1,0 +1,26 @@
+<apex:page id="FlightInformationEmailPdf" standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" title="Booking Confirmation"
+           applyHtmlTag="false" applyBodyTag="false" renderAs="pdf" standardController="KaptioTravel__Itinerary__c">
+    <head>
+        <style type="text/css">
+            * {
+                font-family: Arial Unicode MS !important;
+                box-sizing: border-box;
+            }
+
+            table {
+                border-collapse:collapse;
+                text-align: center;
+                border: 1px solid #999999;
+            }
+
+            table tr,
+            table tr th,
+            table tr td{
+                border: 1px solid #999999;
+            }
+        </style>
+    </head>
+    <body>
+    <c:FlightInformationEmail itinId="{!KaptioTravel__Itinerary__c.Id}"/>
+    </body>
+</apex:page>
