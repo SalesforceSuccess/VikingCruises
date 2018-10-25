@@ -1,0 +1,61 @@
+/**
+ * Created by maxim on 10/11/18.
+ */
+
+public with sharing class AccountBatch implements Database.Batchable<sObject>, Database.Stateful {
+	
+	private String mode;
+	private List<String> errors;
+	
+	public AccountBatch() {
+		this.mode = 'Update Cabins';
+		this.errors = new List<String> {'Account Id, Error Message'};
+	}
+	
+	public AccountBatch(String p_mode) {
+		this();
+		
+		this.mode = String.isNotBlank(p_mode) ? p_mode : 'Update Cabins';
+	}
+	
+	public Database.QueryLocator start(Database.BatchableContext BC) {
+		String query;
+		if (this.mode == 'Update Cabins') {
+			Id travelAgentId = Account.SObjectType.getDescribe().getRecordTypeInfosByName().get('Travel Agent').getRecordTypeId();
+			query = 'SELECT CabinsBooked__c FROM Account WHERE RecordTypeId = \'' + travelAgentId + '\'';
+		}
+		return Database.getQueryLocator(query);
+	}
+	
+	public void execute(Database.BatchableContext BC, List<Account> p_accounts) {
+		
+		if (this.mode == 'Update Cabins') {
+			List<KaptioTravel__Itinerary__c> itineraries = [SELECT CabinsBooked__c FROM KaptioTravel__Itinerary__c WHERE KaptioTravel__Account__c = :p_accounts.get(0).Id LIMIT 10000];
+			Integer amountBookedCabins = 0;
+			for (KaptioTravel__Itinerary__c itinerary : itineraries) {
+				if (itinerary.CabinsBooked__c != null) {
+					amountBookedCabins += itinerary.CabinsBooked__c.intValue();
+				}
+			}
+				p_accounts.get(0).CabinsBooked__c = amountBookedCabins;
+			
+			Database.SaveResult result = Database.update(p_accounts.get(0));
+			if ( ! result.isSuccess()) {
+				this.errors.add(result.getId() + ',' + result.getErrors().get(0).getMessage());
+			}
+		}
+	}
+	
+	public void finish(Database.BatchableContext BC) {
+		Messaging.EmailFileAttachment csvAttachment = new Messaging.EmailFileAttachment();
+		csvAttachment.setFileName('Errors_CabinsBookedAccounts.csv');
+		csvAttachment.setBody(Blob.valueOf(String.join(this.errors, '\n')));
+		
+		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+		email.setSubject('Error after Update CabinsBooked on Accounts');
+		email.setToAddresses(new List<String> {'admin@kaptio.com'});
+		email.setPlainTextBody('Here is enclosed csv file with errors after Update CabinsBooked on Accounts.');
+		email.setFileAttachments(new Messaging.EmailFileAttachment[]{csvAttachment});
+		Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
+	}
+}
